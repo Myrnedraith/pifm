@@ -33,6 +33,9 @@
 #include <signal.h>
 #include <unistd.h>
 
+#include <iostream>
+using namespace std;
+
 #define PAGE_SIZE (4*1024)
 #define BLOCK_SIZE (4*1024)
 
@@ -560,7 +563,7 @@ void playWav(char* filename, float samplerate, bool stereo)
     
     int readBytes;
     while (readBytes = read(fp, &data, 1024)) {
-        
+        cerr << ".";
         ss->consume(data, readBytes);
     }
     close(fp);
@@ -661,10 +664,15 @@ int main(int argc, char **argv)
     if (argc>1) {
       setup_fm();
       setupDMA(argc>2?atof(argv[2]):103.3);
-      playWav(argv[1], argc>3?atof(argv[3]):22050, argc>4);
       volume = argc>5 ? atoi(argv[5]) : 4; 
+      playWav(argv[1], argc>3?atof(argv[3]):22050, argc>4 ? atoi(argv[4]) : 0);
     } else
-      fprintf(stderr, "Usage:   program wavfile.wav [freq] [sample rate] [stereo] [volume]\n\nWhere wavfile is 16 bit 22.5kHz Stereo.  Set wavfile to '-' to use stdin.\nfreq is in Mhz (default 103.3)\nsample rate of wav file in Hz\nvolume is in integer (0-8; default 4)\n\nPlay an empty file to transmit silence\n");
+      fprintf(stderr, "Usage:   program wavfile.wav [freq] [sample rate] [stereo] [volume]\n\n"
+      "Where wavfile is 16 bit 22.5kHz Stereo.  Set wavfile to '-' to use stdin.\n"
+      "freq is in Mhz (default 103.3)\n"
+      "sample rate of wav file in Hz\n"
+      "volume is in integer (0-8; default 4)\n\n"
+      "Play an empty file to transmit silence\n");
     
     return 0;
 
