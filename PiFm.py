@@ -3,7 +3,6 @@
 import subprocess
 import os
 import wave
-import ffmpeg
 
 
 def play(path:str, freq = '', sample_rate = '', stereo = '', volume = '') :
